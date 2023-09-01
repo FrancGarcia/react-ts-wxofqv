@@ -4,17 +4,23 @@ import { useState } from 'react';
 
 
 function FilterableProductTable({ products }) {
+  /* 
+   * Include the usStates in this component because it is the highest 
+   * parent where the data will be shared between SearchBar and ProductTable.
+   */
   const [filterText, setFilterText] = useState('');
   const [inStockOnly, setInStockOnly] = useState(false);
 
   return (
     <div>
       <SearchBar 
+        // Pass in the states as props
         filterText={filterText} 
         inStockOnly={inStockOnly} 
         onFilterTextChange={setFilterText} 
         onInStockOnlyChange={setInStockOnly} />
       <ProductTable 
+        // Pass in the states as props
         products={products} 
         filterText={filterText}
         inStockOnly={inStockOnly} />
@@ -33,6 +39,7 @@ function ProductCategoryRow({ category }) {
 }
 
 function ProductRow({ product }) {
+  // If the fruit is not in stock, label it red
   const name = product.stocked ? product.name :
     <span style={{ color: 'red' }}>
       {product.name}
@@ -46,11 +53,13 @@ function ProductRow({ product }) {
   );
 }
 
+// Pass in the props parameters
 function ProductTable({ products, filterText, inStockOnly }) {
   const rows = [];
   let lastCategory = null;
 
   products.forEach((product) => {
+    // If the item you are searching is not in the table, return nothing for this product and skip it (do not include it in the table of products)
     if (
       product.name.toLowerCase().indexOf(
         filterText.toLowerCase()
@@ -58,6 +67,7 @@ function ProductTable({ products, filterText, inStockOnly }) {
     ) {
       return;
     }
+    // If the checkbox is marked, only checks if the item is in stock. If not, return nothing for this product and skip it (do not include it in the table of products)
     if (inStockOnly && !product.stocked) {
       return;
     }
@@ -76,6 +86,7 @@ function ProductTable({ products, filterText, inStockOnly }) {
     lastCategory = product.category;
   });
 
+  // Return a table with the newly filtered data
   return (
     <table>
       <thead>
@@ -89,6 +100,7 @@ function ProductTable({ products, filterText, inStockOnly }) {
   );
 }
 
+// Pass in the props parameters
 function SearchBar({
   filterText,
   inStockOnly,
@@ -99,12 +111,15 @@ function SearchBar({
     <form>
       <input 
         type="text" 
+        // Include the filterText as a value to display on SearchBar
         value={filterText} placeholder="Search..." 
+        // Add onChange event handler to change what text is displayed on the SearchBar to whatever the user types which is e.target.value
         onChange={(e) => onFilterTextChange(e.target.value)} />
       <label>
         <input 
           type="checkbox" 
           checked={inStockOnly} 
+          // If checkbox is clicked, only display the items in stock only
           onChange={(e) => onInStockOnlyChange(e.target.checked)} />
         {' '}
         Only show products in stock
@@ -113,6 +128,7 @@ function SearchBar({
   );
 }
 
+// Keep a constant array of the products
 const PRODUCTS = [
   {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
   {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
@@ -125,3 +141,4 @@ const PRODUCTS = [
 export default function App() {
   return <FilterableProductTable products={PRODUCTS} />;
 }
+
