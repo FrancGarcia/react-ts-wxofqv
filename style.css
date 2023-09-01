@@ -1,0 +1,14 @@
+h1, p {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.avatar {
+  border-radius: 20px;
+}
+
+button {
+  background-color: gray;
+  color: white;
+  position: relative;
+  left: 25px;
+}
