@@ -1,68 +1,58 @@
 import * as React from 'react';
 import './style.css';
-// You can import files as well and use their components
-// jsx files have to exclude the .jsx at the end when importing
+import { useState } from 'react';
+// import the sculptureList array from the data file
+import { sculptureList } from './data';
 
-// Import the people array
-import { people } from './data';
+export default function Gallery() {
+  // Use the state hook to keep track of the index state and the showMore state
+  const [index, setIndex] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+  // boolean used to keep track of where we are in the sculpture list
+  const hasNext = index < sculptureList.length - 1;
 
-// Import the getImageUrl function
-import { getImageUrl } from './util';
+  // Event handler used to set the index in the sculpture list
+  // Used to traverse the list of sculptures
+  function handleNextClick() {
+    // If there is a valid next index, then go to it
+    if (hasNext) {
+      setIndex(index + 1);
+      // else restart from the beginning of the list
+    } else {
+      setIndex(0);
+    }
+  }
 
-// export default function Gallery() {
-//   return (
-//     <section>
-//       <h1>Amazing scientists</h1>
-//       <Profile />
-//     </section>
-//   );
-// }
+  // Event handler used to set the show more state
+  function handleMoreClick() {
+    // sets to false
+    setShowMore(!showMore);
+  }
 
-// Pass in the props as parameters
-// function Item({ name, isPacked }) {
-//   // If the item is packed, then add a checkmark next to it
-//   return (
-//     // Rendering items in the list in PackingList component
-//     <li className="item">
-//       {name} {isPacked && '✔'}
-//     </li>
-//   );
-// }
-
-// export default function PackingList() {
-//   return (
-//     <section>
-//       <h1>Sally Ride's Packing List</h1>
-//       <ul>
-//         <Item isPacked={true} name="Space suit" />
-//         <Item isPacked={false} name="Coloring book" />
-//         <Item isPacked={true} name="Passport" />
-//       </ul>
-//     </section>
-//   );
-// }
-
-export default function List() {
-  // Convert each person in people array to a component and put it into listItems
-  const listItems = people.map((person) => (
-    // Use the person.id as the key to keep track of each unique item
-    <ul key={person.id}>
-      <img src={getImageUrl(person)} alt={person.name} />
-      <p>
-        <b>{person.name}:</b>
-        {' ' + person.profession + ' '}
-        known for {person.accomplishment}
-      </p>
-    </ul>
-  ));
-
+  // Stores current element (aka sculpture) in the list of sculptures
+  let sculpture = sculptureList[index];
   return (
-    <article>
-      <h1>Scientists</h1>
-      <ul // Display the list items
-      >
-        {listItems}
-      </ul>
-    </article>
+    <>
+      <button onClick={handleNextClick}>Next</button>
+      <h2>
+        <i>{sculpture.name} </i>
+        by {sculpture.artist}
+      </h2>
+      <h3>
+        ({index + 1} of {sculptureList.length})
+      </h3>
+      <button onClick={handleMoreClick}>
+        {showMore ? 'Hide' : 'Show'} details
+      </button>
+      {showMore && <p>{sculpture.description}</p>}
+      <img src={sculpture.url} alt={sculpture.alt} />
+    </>
+    /*
+     * SUMMARY: handleNextClick is called to change index to go to next sculpture in the list.
+     * handleMoreClick is called to show details or hide details by setting showMore to true or false.
+     * handleMoreClick is initially set to false.
+     * If showMore is set to true, then the details are showing and "Hide Details" will be displayed.
+     * If showMore is set to false, then the details are NOT showing and "Show details" will be displayed.
+     */
   );
 }

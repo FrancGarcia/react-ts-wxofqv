@@ -2,4 +2,5 @@
 
 [Edit on StackBlitz ⚡️](https://stackblitz.com/edit/react-ts-wxofqv)
 
-Followed React Tutorial and created first shopping cart webapp with filtering mechanism for in-stock, fruits, or vegetables.
+Tutorial 4: Adding interactivity
+SUMMARY: Tutorial includes event handling, creating your own components and event handler props, using states, queeing a series of state updates, and updating arrays with states.
